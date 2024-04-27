@@ -22,8 +22,10 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = true)
     private String name;
 
+    @Column(nullable = true)
     private Date date_of_birth;
 
     private String mobile;
@@ -31,6 +33,7 @@ public class Customer {
     @Column(nullable = true)
     private String email;
 
+    @Column(nullable = true)
     @OneToMany(mappedBy = "customer")
     private List<Otp> otps = new ArrayList<>();
 
