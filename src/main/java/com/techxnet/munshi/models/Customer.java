@@ -7,6 +7,8 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,23 +17,30 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.transaction.Transactional;
 
 @Entity
+@Transactional
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = true)
     private String name;
 
-    private Date date_of_birth;
+    @Column(nullable = true)
+    private Date dateOfBirth;
 
+    @Column(unique = true, nullable = false)
     private String mobile;
 
     @Column(nullable = true)
     private String email;
 
+    @Column(nullable = true)
     @OneToMany(mappedBy = "customer")
+    @JsonBackReference
     private List<Otp> otps = new ArrayList<>();
 
     public List<Otp> getOtps() {
@@ -44,17 +53,19 @@ public class Customer {
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
+    @Column(name = "createdAt")
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
+    @Column(name = "updatedAt")
     private Date updatedAt;
 
     public Customer() {}
 
-    public Customer(String name, Date date_of_birth, String mobile, String email, List<Otp> otps) {
+    public Customer(String name, Date dateOfBirth, String mobile, String email, List<Otp> otps) {
         this.name = name;
-        this.date_of_birth = date_of_birth;
+        this.dateOfBirth = dateOfBirth;
         this.mobile = mobile;
         this.email = email;
         this.otps = otps;
@@ -76,12 +87,12 @@ public class Customer {
         this.name = name;
     }
 
-    public Date getDate_of_birth() {
-        return date_of_birth;
+    public Date getdateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDate_of_birth(Date date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setdateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getMobile() {
@@ -118,7 +129,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customers [id=" + id + ", name=" + name + ", date_of_birth=" + date_of_birth + ", mobile=" + mobile
+        return "Customers [id=" + id + ", name=" + name + ", dateOfBirth=" + dateOfBirth + ", mobile=" + mobile
                 + ", email=" + email + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
     }
 
